@@ -1,0 +1,107 @@
+dn: ou=People,dc=bionicpro,dc=local
+objectClass: top
+objectClass: organizationalUnit
+ou: People
+description: BionicPRO users
+
+dn: ou=DE,ou=People,dc=bionicpro,dc=local
+objectClass: top
+objectClass: organizationalUnit
+ou: DE
+description: Germany office
+
+dn: ou=US,ou=People,dc=bionicpro,dc=local
+objectClass: top
+objectClass: organizationalUnit
+ou: US
+description: US office
+
+dn: ou=Groups,dc=bionicpro,dc=local
+objectClass: top
+objectClass: organizationalUnit
+ou: Groups
+description: BionicPRO groups for Keycloak sync
+
+dn: uid=anna.mueller,ou=DE,ou=People,dc=bionicpro,dc=local
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Anna Mueller
+sn: Mueller
+givenName: Anna
+uid: anna.mueller
+mail: anna.mueller@bionicpro.de
+l: Berlin
+userPassword: password123
+
+dn: uid=klaus.weber,ou=DE,ou=People,dc=bionicpro,dc=local
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Klaus Weber
+sn: Weber
+givenName: Klaus
+uid: klaus.weber
+mail: klaus.weber@bionicpro.de
+l: Munich
+userPassword: password123
+
+dn: uid=bob.smith,ou=US,ou=People,dc=bionicpro,dc=local
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Bob Smith
+sn: Smith
+givenName: Bob
+uid: bob.smith
+mail: bob.smith@bionicpro.us
+l: New York
+userPassword: password123
+
+dn: uid=carol.jones,ou=US,ou=People,dc=bionicpro,dc=local
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Carol Jones
+sn: Jones
+givenName: Carol
+uid: carol.jones
+mail: carol.jones@bionicpro.us
+l: San Francisco
+userPassword: password123
+
+dn: cn=bionicpro-user,ou=Groups,dc=bionicpro,dc=local
+objectClass: groupOfNames
+objectClass: top
+cn: bionicpro-user
+member: uid=anna.mueller,ou=DE,ou=People,dc=bionicpro,dc=local
+member: uid=bob.smith,ou=US,ou=People,dc=bionicpro,dc=local
+
+dn: cn=bionicpro-administrator,ou=Groups,dc=bionicpro,dc=local
+objectClass: groupOfNames
+objectClass: top
+cn: bionicpro-administrator
+member: uid=klaus.weber,ou=DE,ou=People,dc=bionicpro,dc=local
+
+dn: cn=bionicpro-prothetic,ou=Groups,dc=bionicpro,dc=local
+objectClass: groupOfNames
+objectClass: top
+cn: bionicpro-prothetic
+member: uid=carol.jones,ou=US,ou=People,dc=bionicpro,dc=local
+
+dn: cn=bionicpro-DE-user,ou=Groups,dc=bionicpro,dc=local
+objectClass: groupOfNames
+objectClass: top
+cn: bionicpro-DE-user
+member: uid=anna.mueller,ou=DE,ou=People,dc=bionicpro,dc=local
+
+dn: cn=bionicpro-US-user,ou=Groups,dc=bionicpro,dc=local
+objectClass: groupOfNames
+objectClass: top
+cn: bionicpro-US-user
+member: uid=bob.smith,ou=US,ou=People,dc=bionicpro,dc=local
+

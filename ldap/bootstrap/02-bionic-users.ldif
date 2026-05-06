@@ -1,0 +1,154 @@
+dn: uid=anna.mueller,ou=DE,ou=People,dc=bionicpro,dc=local
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Anna Mueller
+sn: Mueller
+givenName: Anna
+uid: anna.mueller
+mail: anna.mueller@bionicpro.de
+l: Berlin
+userPassword: password123
+
+dn: uid=klaus.weber,ou=DE,ou=People,dc=bionicpro,dc=local
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Klaus Weber
+sn: Weber
+givenName: Klaus
+uid: klaus.weber
+mail: klaus.weber@bionicpro.de
+l: Munich
+userPassword: password123
+
+dn: uid=bob.smith,ou=US,ou=People,dc=bionicpro,dc=local
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Bob Smith
+sn: Smith
+givenName: Bob
+uid: bob.smith
+mail: bob.smith@bionicpro.us
+l: New York
+userPassword: password123
+
+dn: uid=carol.jones,ou=US,ou=People,dc=bionicpro,dc=local
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Carol Jones
+sn: Jones
+givenName: Carol
+uid: carol.jones
+mail: carol.jones@bionicpro.us
+l: San Francisco
+userPassword: password123
+
+dn: uid=anna.mueller,ou=DE,ou=People,dc=bionicpro,dc=local
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Anna Mueller
+sn: Mueller
+givenName: Anna
+uid: anna.mueller
+mail: anna.mueller@bionicpro.de
+l: Berlin
+userPassword: password123
+
+dn: uid=klaus.weber,ou=DE,ou=People,dc=bionicpro,dc=local
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Klaus Weber
+sn: Weber
+givenName: Klaus
+uid: klaus.weber
+mail: klaus.weber@bionicpro.de
+l: Munich
+userPassword: password123
+
+dn: uid=bob.smith,ou=US,ou=People,dc=bionicpro,dc=local
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Bob Smith
+sn: Smith
+givenName: Bob
+uid: bob.smith
+mail: bob.smith@bionicpro.us
+l: New York
+userPassword: password123
+
+dn: uid=carol.jones,ou=US,ou=People,dc=bionicpro,dc=local
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Carol Jones
+sn: Jones
+givenName: Carol
+uid: carol.jones
+mail: carol.jones@bionicpro.us
+l: San Francisco
+userPassword: password123
+dn: uid=anna.mueller,ou=DE,ou=People,dc=bionicpro,dc=local
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Anna Mueller
+sn: Mueller
+givenName: Anna
+uid: anna.mueller
+mail: anna.mueller@bionicpro.de
+l: Berlin
+userPassword: password123
+
+dn: uid=klaus.weber,ou=DE,ou=People,dc=bionicpro,dc=local
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Klaus Weber
+sn: Weber
+givenName: Klaus
+uid: klaus.weber
+mail: klaus.weber@bionicpro.de
+l: Munich
+userPassword: password123
+
+dn: uid=bob.smith,ou=US,ou=People,dc=bionicpro,dc=local
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Bob Smith
+sn: Smith
+givenName: Bob
+uid: bob.smith
+mail: bob.smith@bionicpro.us
+l: New York
+userPassword: password123
+
+dn: uid=carol.jones,ou=US,ou=People,dc=bionicpro,dc=local
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Carol Jones
+sn: Jones
+givenName: Carol
+uid: carol.jones
+mail: carol.jones@bionicpro.us
+l: San Francisco
+userPassword: password123

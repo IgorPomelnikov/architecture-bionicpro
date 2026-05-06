@@ -1,0 +1,91 @@
+dn: cn=bionicpro-user,ou=Groups,dc=bionicpro,dc=local
+objectClass: groupOfNames
+objectClass: top
+cn: bionicpro-user
+member: uid=anna.mueller,ou=DE,ou=People,dc=bionicpro,dc=local
+member: uid=bob.smith,ou=US,ou=People,dc=bionicpro,dc=local
+
+dn: cn=bionicpro-administrator,ou=Groups,dc=bionicpro,dc=local
+objectClass: groupOfNames
+objectClass: top
+cn: bionicpro-administrator
+member: uid=klaus.weber,ou=DE,ou=People,dc=bionicpro,dc=local
+
+dn: cn=bionicpro-prothetic,ou=Groups,dc=bionicpro,dc=local
+objectClass: groupOfNames
+objectClass: top
+cn: bionicpro-prothetic
+member: uid=carol.jones,ou=US,ou=People,dc=bionicpro,dc=local
+
+dn: cn=bionicpro-DE-user,ou=Groups,dc=bionicpro,dc=local
+objectClass: groupOfNames
+objectClass: top
+cn: bionicpro-DE-user
+member: uid=anna.mueller,ou=DE,ou=People,dc=bionicpro,dc=local
+
+dn: cn=bionicpro-US-user,ou=Groups,dc=bionicpro,dc=local
+objectClass: groupOfNames
+objectClass: top
+cn: bionicpro-US-user
+member: uid=bob.smith,ou=US,ou=People,dc=bionicpro,dc=local
+
+dn: cn=bionicpro-user,ou=Groups,dc=bionicpro,dc=local
+objectClass: groupOfNames
+objectClass: top
+cn: bionicpro-user
+member: uid=anna.mueller,ou=DE,ou=People,dc=bionicpro,dc=local
+member: uid=bob.smith,ou=US,ou=People,dc=bionicpro,dc=local
+
+dn: cn=bionicpro-administrator,ou=Groups,dc=bionicpro,dc=local
+objectClass: groupOfNames
+objectClass: top
+cn: bionicpro-administrator
+member: uid=klaus.weber,ou=DE,ou=People,dc=bionicpro,dc=local
+
+dn: cn=bionicpro-prothetic,ou=Groups,dc=bionicpro,dc=local
+objectClass: groupOfNames
+objectClass: top
+cn: bionicpro-prothetic
+member: uid=carol.jones,ou=US,ou=People,dc=bionicpro,dc=local
+
+dn: cn=bionicpro-DE-user,ou=Groups,dc=bionicpro,dc=local
+objectClass: groupOfNames
+objectClass: top
+cn: bionicpro-DE-user
+member: uid=anna.mueller,ou=DE,ou=People,dc=bionicpro,dc=local
+
+dn: cn=bionicpro-US-user,ou=Groups,dc=bionicpro,dc=local
+objectClass: groupOfNames
+objectClass: top
+cn: bionicpro-US-user
+member: uid=bob.smith,ou=US,ou=People,dc=bionicpro,dc=local
+dn: cn=bionicpro-user,ou=Groups,dc=bionicpro,dc=local
+objectClass: groupOfNames
+objectClass: top
+cn: bionicpro-user
+member: uid=anna.mueller,ou=DE,ou=People,dc=bionicpro,dc=local
+member: uid=bob.smith,ou=US,ou=People,dc=bionicpro,dc=local
+
+dn: cn=bionicpro-administrator,ou=Groups,dc=bionicpro,dc=local
+objectClass: groupOfNames
+objectClass: top
+cn: bionicpro-administrator
+member: uid=klaus.weber,ou=DE,ou=People,dc=bionicpro,dc=local
+
+dn: cn=bionicpro-prothetic,ou=Groups,dc=bionicpro,dc=local
+objectClass: groupOfNames
+objectClass: top
+cn: bionicpro-prothetic
+member: uid=carol.jones,ou=US,ou=People,dc=bionicpro,dc=local
+
+dn: cn=bionicpro-DE-user,ou=Groups,dc=bionicpro,dc=local
+objectClass: groupOfNames
+objectClass: top
+cn: bionicpro-DE-user
+member: uid=anna.mueller,ou=DE,ou=People,dc=bionicpro,dc=local
+
+dn: cn=bionicpro-US-user,ou=Groups,dc=bionicpro,dc=local
+objectClass: groupOfNames
+objectClass: top
+cn: bionicpro-US-user
+member: uid=bob.smith,ou=US,ou=People,dc=bionicpro,dc=local

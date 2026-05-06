@@ -1,0 +1,70 @@
+dn: ou=People,dc=bionicpro,dc=local
+objectClass: top
+objectClass: organizationalUnit
+ou: People
+description: BionicPRO users
+
+dn: ou=DE,ou=People,dc=bionicpro,dc=local
+objectClass: top
+objectClass: organizationalUnit
+ou: DE
+description: Germany office
+
+dn: ou=US,ou=People,dc=bionicpro,dc=local
+objectClass: top
+objectClass: organizationalUnit
+ou: US
+description: US office
+
+dn: ou=Groups,dc=bionicpro,dc=local
+objectClass: top
+objectClass: organizationalUnit
+ou: Groups
+description: BionicPRO groups for Keycloak sync
+
+dn: ou=People,dc=bionicpro,dc=local
+objectClass: top
+objectClass: organizationalUnit
+ou: People
+description: BionicPRO users
+
+dn: ou=DE,ou=People,dc=bionicpro,dc=local
+objectClass: top
+objectClass: organizationalUnit
+ou: DE
+description: Germany office
+
+dn: ou=US,ou=People,dc=bionicpro,dc=local
+objectClass: top
+objectClass: organizationalUnit
+ou: US
+description: US office
+
+dn: ou=Groups,dc=bionicpro,dc=local
+objectClass: top
+objectClass: organizationalUnit
+ou: Groups
+description: BionicPRO groups for Keycloak sync
+dn: ou=People,dc=bionicpro,dc=local
+objectClass: top
+objectClass: organizationalUnit
+ou: People
+description: Пользователи BionicPRO
+
+dn: ou=DE,ou=People,dc=bionicpro,dc=local
+objectClass: top
+objectClass: organizationalUnit
+ou: DE
+description: Представительство Германия
+
+dn: ou=US,ou=People,dc=bionicpro,dc=local
+objectClass: top
+objectClass: organizationalUnit
+ou: US
+description: Представительство США
+
+dn: ou=Groups,dc=bionicpro,dc=local
+objectClass: top
+objectClass: organizationalUnit
+ou: Groups
+description: Глобальные роли BionicPRO (синхронизация с Keycloak)

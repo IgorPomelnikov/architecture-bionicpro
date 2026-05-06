@@ -1,6 +1,26 @@
 version: '3.8'
 
 services:
+  openldap:
+    image: osixia/openldap:1.5.0
+    environment:
+      LDAP_ORGANISATION: BionicPRO
+      LDAP_DOMAIN: bionicpro.local
+      LDAP_ADMIN_PASSWORD: admin
+      LDAP_CONFIG_PASSWORD: config
+      LDAP_RFC2307BIS_SCHEMA: "false"
+      LDAP_REMOVE_CONFIG_AFTER_SETUP: "false"
+    ports:
+      - "389:389"
+    volumes:
+      - ./ldap/bootstrap-clean:/container/service/slapd/assets/config/bootstrap/ldif/custom
+    healthcheck:
+      test: ["CMD", "ldapsearch", "-x", "-H", "ldap://127.0.0.1", "-b", "dc=bionicpro,dc=local", "-D", "cn=admin,dc=bionicpro,dc=local", "-w", "admin", "-s", "base", "(objectClass=*)"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 15s
+
   keycloak_db:
     image: postgres:14
     environment:
@@ -28,15 +48,46 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - keycloak_db
+      keycloak_db:
+        condition: service_started
+      openldap:
+        condition: service_healthy
+    user: root
+  # frontend:
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        REACT_APP_API_URL: http://localhost:8000
     ports:
       - "3000:3000"
     environment:
       REACT_APP_API_URL: http://localhost:8000
-      REACT_APP_KEYCLOAK_URL: http://localhost:8080
-      REACT_APP_KEYCLOAK_REALM: reports-realm
-      REACT_APP_KEYCLOAK_CLIENT_ID: reports-frontend
+    depends_on:
+      - bff
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  bff:
+    build:
+      context: ./bionicpro-auth/BFF
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: "http://+:8080"
+      Redis__Configuration: "redis:6379,abortConnect=false"
+      Redis__InstanceName: "bff:"
+      OpenIdConnect__Authority: "http://keycloak:8080/realms/reports-realm"
+      OpenIdConnect__PublicAuthority: "http://localhost:8080/realms/reports-realm"
+      OpenIdConnect__RequireHttpsMetadata: "false"
+      OpenIdConnect__ClientId: bff-client
+      OpenIdConnect__ClientSecret: bff-client-secret
+    depends_on:
+      - keycloak
+      - redis
