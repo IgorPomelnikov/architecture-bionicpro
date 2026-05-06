@@ -1,0 +1,6 @@
+﻿services:
+  bionicpro-auth:
+    image: bionicpro-auth
+    build:
+      context: .
+      dockerfile: Dockerfile
