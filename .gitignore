@@ -1,2 +1,30 @@
 /postgres-keycloak-data
 2024__yandex-architecture-sso.code-workspace
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# .NET build artifacts
+**/bin/
+**/obj/
+**/.vs/
+
+# Python artifacts
+**/__pycache__/
+**/*.pyc
+
+# Local runtime data
+/airflow-db-data/
+/clickhouse/data/
+/nginx/cache/
+/minio-data/
+
+# Local env files
+**/.env
+**/.env.local
+
+# Temporary backups (e.g. draw.io on Windows)
+**/.$*.bkp
