@@ -1,0 +1,2 @@
+-- Keycloak использует только keycloak_db; схема realm создаётся при старте Keycloak.
+-- Данные CRM перенесены в отдельный сервис crm_db (см. postgres/crm-init.sql).

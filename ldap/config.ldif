@@ -1,49 +1,112 @@
-# Организационные подразделения (OU)
-dn: ou=People,dc=example,dc=com
+# Агрегированный LDIF BionicPRO (дублирует ldap/bootstrap/*.ldif для ревью в одном файле).
+# Развёртывание: см. ldap/bootstrap/ — файлы подхватываются OpenLDAP при старте контейнера.
+
+# --- 01-bionic-structure.ldif ---
+dn: ou=People,dc=bionicpro,dc=local
 objectClass: top
 objectClass: organizationalUnit
 ou: People
+description: Пользователи BionicPRO
 
-dn: ou=Groups,dc=example,dc=com
+dn: ou=DE,ou=People,dc=bionicpro,dc=local
+objectClass: top
+objectClass: organizationalUnit
+ou: DE
+description: Представительство Германия
+
+dn: ou=US,ou=People,dc=bionicpro,dc=local
+objectClass: top
+objectClass: organizationalUnit
+ou: US
+description: Представительство США
+
+dn: ou=Groups,dc=bionicpro,dc=local
 objectClass: top
 objectClass: organizationalUnit
 ou: Groups
+description: Глобальные роли BionicPRO (синхронизация с Keycloak)
 
-# Пользователи
-dn: uid=john.doe,ou=People,dc=example,dc=com
-objectClass: top
+# --- 02-bionic-users.ldif ---
+dn: uid=anna.mueller,ou=DE,ou=People,dc=bionicpro,dc=local
 objectClass: inetOrgPerson
-cn: John
-sn: Doe
-uid: john.doe
-mail: john@example.com
-userPassword: password
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Anna Mueller
+sn: Mueller
+givenName: Anna
+uid: anna.mueller
+mail: anna.mueller@bionicpro.de
+l: Berlin
+userPassword: password123
 
-dn: uid=jane.smith,ou=People,dc=example,dc=com
-objectClass: top
+dn: uid=klaus.weber,ou=DE,ou=People,dc=bionicpro,dc=local
 objectClass: inetOrgPerson
-cn: Jane
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Klaus Weber
+sn: Weber
+givenName: Klaus
+uid: klaus.weber
+mail: klaus.weber@bionicpro.de
+l: Munich
+userPassword: password123
+
+dn: uid=bob.smith,ou=US,ou=People,dc=bionicpro,dc=local
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Bob Smith
 sn: Smith
-uid: jane.smith
-mail: jane@example.com
-userPassword: password
+givenName: Bob
+uid: bob.smith
+mail: bob.smith@bionicpro.us
+l: New York
+userPassword: password123
 
-dn: uid=alex,ou=People,dc=example,dc=com
+dn: uid=carol.jones,ou=US,ou=People,dc=bionicpro,dc=local
 objectClass: inetOrgPerson
-cn: Alex
-sn: Johnson
-uid: alex.johnson
-mail: alex@example.com
-userPassword: password
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Carol Jones
+sn: Jones
+givenName: Carol
+uid: carol.jones
+mail: carol.jones@bionicpro.us
+l: San Francisco
+userPassword: password123
 
-# Роли
-dn: cn=user,ou=Groups,dc=example,dc=com
+# --- 03-bionic-groups.ldif ---
+dn: cn=bionicpro-user,ou=Groups,dc=bionicpro,dc=local
 objectClass: groupOfNames
-cn: user
-member: uid=jane.smith,ou=People,dc=example,dc=com
+objectClass: top
+cn: bionicpro-user
+member: uid=anna.mueller,ou=DE,ou=People,dc=bionicpro,dc=local
+member: uid=bob.smith,ou=US,ou=People,dc=bionicpro,dc=local
 
-dn: cn=prothetic_user,ou=Groups,dc=example,dc=com
+dn: cn=bionicpro-administrator,ou=Groups,dc=bionicpro,dc=local
 objectClass: groupOfNames
-cn: prothetic_user
-member: uid=alex.johnson,ou=People,dc=example,dc=com
-member: uid=john.doe,ou=People,dc=example,dc=com
+objectClass: top
+cn: bionicpro-administrator
+member: uid=klaus.weber,ou=DE,ou=People,dc=bionicpro,dc=local
+
+dn: cn=bionicpro-prothetic,ou=Groups,dc=bionicpro,dc=local
+objectClass: groupOfNames
+objectClass: top
+cn: bionicpro-prothetic
+member: uid=carol.jones,ou=US,ou=People,dc=bionicpro,dc=local
+
+dn: cn=bionicpro-DE-user,ou=Groups,dc=bionicpro,dc=local
+objectClass: groupOfNames
+objectClass: top
+cn: bionicpro-DE-user
+member: uid=anna.mueller,ou=DE,ou=People,dc=bionicpro,dc=local
+
+dn: cn=bionicpro-US-user,ou=Groups,dc=bionicpro,dc=local
+objectClass: groupOfNames
+objectClass: top
+cn: bionicpro-US-user
+member: uid=bob.smith,ou=US,ou=People,dc=bionicpro,dc=local
