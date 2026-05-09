@@ -1,4 +1,4 @@
--- CRM OLTP (отдельно от Keycloak). Debezium читает эту БД и публикует в Kafka.
+-- CRM OLTP (отдельно от Keycloak). Публикация и пользователь debezium — для CDC → Kafka → ClickHouse (KafkaEngine).
 CREATE TABLE IF NOT EXISTS bionicpro_orders
 (
     id              VARCHAR(50) PRIMARY KEY,

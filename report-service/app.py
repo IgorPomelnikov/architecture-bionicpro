@@ -175,13 +175,19 @@ async def _query_clickhouse(user_id: str) -> list[dict]:
             report_date,
             bionicpro_id,
             user_id,
-            signal_count,
-            signal_avg,
-            response_time_avg,
-            battery_avg,
-            performance_score
+            sum(signal_count) AS signal_count,
+            if(sum(signal_count) = 0, 0, sum(signal_strength_sum) / sum(signal_count)) AS signal_avg,
+            if(sum(signal_count) = 0, 0, sum(response_time_sum) / sum(signal_count)) AS response_time_avg,
+            if(sum(signal_count) = 0, 0, sum(battery_sum) / sum(signal_count)) AS battery_avg,
+            multiIf(
+                sum(signal_count) = 0, 'needs_calibration',
+                sum(response_time_sum) / sum(signal_count) < 100, 'excellent',
+                sum(response_time_sum) / sum(signal_count) < 200, 'good',
+                'needs_calibration'
+            ) AS performance_score
         FROM bionicpro_reports_mart
         WHERE user_id = '{safe_uid}'
+        GROUP BY user_id, bionicpro_id, report_date
         ORDER BY report_date DESC
         LIMIT 100
         FORMAT JSONEachRow
@@ -199,7 +205,7 @@ async def _query_clickhouse(user_id: str) -> list[dict]:
             status_code=502,
             detail=(
                 f"ClickHouse HTTP {response.status_code}: {response.text[:2000]}. "
-                "Проверьте, что таблица bionicpro_reports_mart есть (DAG crm_to_clickhouse)."
+                "Проверьте витрину bionicpro_reports_mart (CDC → Kafka → ClickHouse)."
             ),
         )
 

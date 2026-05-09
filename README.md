@@ -5,3 +5,5 @@
 Зайти на http://localhost:3000/, авторизоваться под test-bionic-user (пароль и логин одинаковые)
 
 Сделать запрос отчета.
+
+Для теста CDC см postgres/debezium-cdc-test-data.sql

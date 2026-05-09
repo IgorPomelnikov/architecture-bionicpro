@@ -171,6 +171,11 @@ services:
         hard: 262144
     security_opt:
       - seccomp:unconfined
+    depends_on:
+      kafka:
+        condition: service_started
+      debezium-setup:
+        condition: service_completed_successfully
     networks:
       - bionicpro-network
 
@@ -272,6 +277,47 @@ services:
       - ./debezium/connectors:/kafka/connect/debezium-connectors
     networks:
       - bionicpro-network
+
+  debezium-setup:
+    image: curlimages/curl:8.5.0
+    depends_on:
+      kafka:
+        condition: service_started
+      crm_db:
+        condition: service_healthy
+      debezium:
+        condition: service_started
+    networks:
+      - bionicpro-network
+    volumes:
+      - ./debezium/connectors/postgres-connector.json:/postgres-connector.json:ro
+    entrypoint: ["/bin/sh", "-ec"]
+    command:
+      - |
+        i=0
+        ready=0
+        while [ "$$i" -lt 90 ]; do
+          if curl -sf "http://debezium:8083/" >/dev/null 2>&1; then
+            ready=1
+            break
+          fi
+          i=$$((i+1))
+          sleep 2
+        done
+        if [ "$$ready" != "1" ]; then
+          echo "Debezium REST API did not become ready in time"
+          exit 1
+        fi
+        code=$$(curl -s -o /tmp/body -w "%{http_code}" -X POST "http://debezium:8083/connectors" \
+          -H "Content-Type: application/json" \
+          -d @/postgres-connector.json)
+        if [ "$$code" = "201" ] || [ "$$code" = "409" ]; then
+          exit 0
+        fi
+        echo "Debezium connector registration failed: HTTP $$code"
+        cat /tmp/body 2>/dev/null || true
+        exit 1
+    restart: "no"
 
 networks:
   bionicpro-network:
