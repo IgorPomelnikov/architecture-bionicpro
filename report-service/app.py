@@ -48,14 +48,14 @@ async def _query_clickhouse(user_id: str) -> list[dict]:
     query = f"""
         SELECT
             report_date,
-            prosthetic_id,
+            bionicpro_id,
             user_id,
             signal_count,
             signal_avg,
             response_time_avg,
             battery_avg,
             performance_score
-        FROM prosthetic_reports_mv
+        FROM bionicpro_reports_mart
         WHERE user_id = '{user_id}'
         ORDER BY report_date DESC
         LIMIT 100

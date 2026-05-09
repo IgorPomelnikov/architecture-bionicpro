@@ -1,3 +1,6 @@
+include:
+  - path: ./architecture-DWH-pipeline/docker-compose.yml
+
 services:
   keycloak_db:
     image: postgres:14
@@ -6,6 +9,25 @@ services:
       POSTGRES_USER: keycloak_user
       POSTGRES_PASSWORD: keycloak_password
       POSTGRES_HOST_AUTH_METHOD: scram-sha-256
+    volumes:
+      - ./postgres-keycloak-data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U keycloak_user -d keycloak_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - bionicpro-network
+
+  crm_db:
+    image: postgres:14
+    environment:
+      POSTGRES_DB: crm
+      POSTGRES_USER: crm_user
+      POSTGRES_PASSWORD: crm_password
+      POSTGRES_HOST_AUTH_METHOD: scram-sha-256
     command: >
       postgres
       -c wal_level=logical
@@ -13,12 +35,12 @@ services:
       -c max_wal_senders=10
       -c shared_preload_libraries='pgoutput'
     volumes:
-      - ./postgres-keycloak-data:/var/lib/postgresql/data
-      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./crm-postgres-data:/var/lib/postgresql/data
+      - ./postgres/crm-init.sql:/docker-entrypoint-initdb.d/01-crm.sql
     ports:
-      - "5433:5432"
+      - "5434:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U keycloak_user -d keycloak_db"]
+      test: ["CMD-SHELL", "pg_isready -U crm_user -d crm"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -132,12 +154,12 @@ services:
   clickhouse:
     image: clickhouse/clickhouse-server:23.8
     container_name: clickhouse
-    user: root
     ports:
       - "8123:8123"
       - "9000:9000"
     volumes:
-      - ./clickhouse/data:/var/lib/clickhouse
+      # Именованный том: bind-mount ./clickhouse/data на Windows часто даёт rename Permission denied в store/
+      - clickhouse-data:/var/lib/clickhouse
       - ./clickhouse/init.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
       CLICKHOUSE_USER: default
@@ -161,87 +183,6 @@ services:
       CDN_URL: "http://localhost:8084/reports"
     depends_on:
       - clickhouse
-    networks:
-      - bionicpro-network
-
-  airflow-db:
-    image: postgres:13
-    environment:
-      POSTGRES_DB: airflow
-      POSTGRES_USER: airflow
-      POSTGRES_PASSWORD: airflow
-    volumes:
-      - ./airflow-db-data:/var/lib/postgresql/data
-    ports:
-      - "5435:5432"
-    networks:
-      - bionicpro-network
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U airflow"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  airflow:
-    build: ./airflow
-    ports:
-      - "8082:8080"
-    environment:
-      AIRFLOW__CORE__EXECUTOR: LocalExecutor
-      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow-db/airflow
-      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
-      AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "false"
-      AIRFLOW__CORE__FERNET_KEY: "46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho="
-      PROSTHETIC_PG_HOST: keycloak_db
-      PROSTHETIC_PG_PORT: "5432"
-      PROSTHETIC_PG_DB: keycloak_db
-      PROSTHETIC_PG_USER: keycloak_user
-      PROSTHETIC_PG_PASSWORD: keycloak_password
-      PROSTHETIC_CLICKHOUSE_URL: http://clickhouse:8123
-      PROSTHETIC_HTTP_TIMEOUT_SEC: "10"
-    command: >
-      bash -c "
-      airflow db init &&
-      airflow users create --username admin --password admin --firstname Admin --lastname User --role Admin --email admin@example.com || true &&
-      airflow webserver
-      "
-    volumes:
-      - ./airflow/dags:/opt/airflow/dags
-    depends_on:
-      airflow-db:
-        condition: service_healthy
-      keycloak_db:
-        condition: service_healthy
-      clickhouse:
-        condition: service_started
-    networks:
-      - bionicpro-network
-
-  airflow-scheduler:
-    build: ./airflow
-    environment:
-      AIRFLOW__CORE__EXECUTOR: LocalExecutor
-      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow-db/airflow
-      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
-      AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "false"
-      AIRFLOW__CORE__FERNET_KEY: "46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho="
-      PROSTHETIC_PG_HOST: keycloak_db
-      PROSTHETIC_PG_PORT: "5432"
-      PROSTHETIC_PG_DB: keycloak_db
-      PROSTHETIC_PG_USER: keycloak_user
-      PROSTHETIC_PG_PASSWORD: keycloak_password
-      PROSTHETIC_CLICKHOUSE_URL: http://clickhouse:8123
-      PROSTHETIC_HTTP_TIMEOUT_SEC: "10"
-    command: airflow scheduler
-    volumes:
-      - ./airflow/dags:/opt/airflow/dags
-    depends_on:
-      airflow-db:
-        condition: service_healthy
-      keycloak_db:
-        condition: service_healthy
-      clickhouse:
-        condition: service_started
     networks:
       - bionicpro-network
 
@@ -305,8 +246,10 @@ services:
   debezium:
     image: debezium/connect:2.5.0.Final
     depends_on:
-      - kafka
-      - keycloak_db
+      kafka:
+        condition: service_started
+      crm_db:
+        condition: service_healthy
     environment:
       BOOTSTRAP_SERVERS: kafka:9092
       GROUP_ID: 1
@@ -327,3 +270,4 @@ networks:
 volumes:
   redis-data:
   minio-data:
+  clickhouse-data:
