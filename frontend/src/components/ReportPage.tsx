@@ -85,7 +85,15 @@ const ReportPage: React.FC = () => {
         return;
       }
 
-      await response.json();
+      const contentType = response.headers.get('content-type') ?? '';
+      if (contentType.includes('application/json')) {
+        const data = (await response.json()) as { url?: string; message?: string };
+        if (data.url) {
+          window.open(data.url, '_blank', 'noopener,noreferrer');
+        }
+      } else {
+        await response.text();
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
