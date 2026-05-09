@@ -18,8 +18,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-CLICKHOUSE_URL = os.getenv("CLICKHOUSE_URL", "http://clickhouse:8123")
+CLICKHOUSE_URL = os.getenv("CLICKHOUSE_URL", "http://clickhouse:8123").rstrip("/")
+CLICKHOUSE_DATABASE = os.getenv("CLICKHOUSE_DATABASE", "default")
 CDN_URL = os.getenv("CDN_URL", "http://localhost:8084/reports")
+
+
+def _ch_escape_string(value: str) -> str:
+    """Экранирование литерала в одинарных кавычках для ClickHouse SQL."""
+    return value.replace("\\", "\\\\").replace("'", "\\'")
 
 
 def _extract_user_id_from_jwt(authorization: str | None) -> str:
@@ -45,6 +51,7 @@ def _extract_user_id_from_jwt(authorization: str | None) -> str:
 
 
 async def _query_clickhouse(user_id: str) -> list[dict]:
+    safe_uid = _ch_escape_string(user_id)
     query = f"""
         SELECT
             report_date,
@@ -56,15 +63,27 @@ async def _query_clickhouse(user_id: str) -> list[dict]:
             battery_avg,
             performance_score
         FROM bionicpro_reports_mart
-        WHERE user_id = '{user_id}'
+        WHERE user_id = '{safe_uid}'
         ORDER BY report_date DESC
         LIMIT 100
         FORMAT JSONEachRow
     """
 
     async with httpx.AsyncClient(timeout=10.0) as client:
-        response = await client.post(CLICKHOUSE_URL, data=query)
-        response.raise_for_status()
+        response = await client.post(
+            f"{CLICKHOUSE_URL}/",
+            params={"database": CLICKHOUSE_DATABASE},
+            content=query.encode("utf-8"),
+            headers={"Content-Type": "text/plain; charset=utf-8"},
+        )
+    if response.status_code != 200:
+        raise HTTPException(
+            status_code=502,
+            detail=(
+                f"ClickHouse HTTP {response.status_code}: {response.text[:2000]}. "
+                "Проверьте, что таблица bionicpro_reports_mart есть (DAG crm_to_clickhouse)."
+            ),
+        )
 
     rows = []
     for line in response.text.strip().splitlines():

@@ -53,6 +53,22 @@ FROM (VALUES ('bionicpro_igor_1', 88, 92, 78),
          AS v(bionicpro_id, signal_strength, response_time_ms, battery_level)
 WHERE NOT EXISTS (SELECT 1 FROM bionicpro_telemetry WHERE bionicpro_id = 'bionicpro_igor_1' LIMIT 1);
 
+-- Keycloak: username test-bionic-user (realm reports-realm)
+INSERT INTO bionicpro_orders (id, user_id, bionicpro_id, bionicpro_type, purchase_date)
+SELECT *
+FROM (VALUES ('5', 'test-bionic-user', 'bionicpro_test_bionic_1', 'bionic_hand', '2025-06-01'::DATE))
+         AS v(id, user_id, bionicpro_id, bionicpro_type, purchase_date)
+WHERE NOT EXISTS (SELECT 1 FROM bionicpro_orders WHERE id = '5');
+
+INSERT INTO bionicpro_telemetry (bionicpro_id, signal_strength, response_time_ms, battery_level)
+SELECT *
+FROM (VALUES ('bionicpro_test_bionic_1', 90, 88, 80),
+             ('bionicpro_test_bionic_1', 87, 95, 77),
+             ('bionicpro_test_bionic_1', 85, 108, 74),
+             ('bionicpro_test_bionic_1', 83, 115, 72))
+         AS v(bionicpro_id, signal_strength, response_time_ms, battery_level)
+WHERE NOT EXISTS (SELECT 1 FROM bionicpro_telemetry WHERE bionicpro_id = 'bionicpro_test_bionic_1' LIMIT 1);
+
 DO $$
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'debezium') THEN
